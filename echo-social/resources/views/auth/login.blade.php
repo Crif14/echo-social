@@ -41,12 +41,6 @@
                             <label class="block text-sm font-medium text-gray-400">
                                 Password
                             </label>
-                            @if (Route::has('password.request'))
-                                <a href="{{ route('password.request') }}"
-                                   class="text-xs text-indigo-400 hover:text-indigo-300 transition-colors">
-                                    Password dimenticata?
-                                </a>
-                            @endif
                         </div>
                         <input type="password" name="password"
                                class="echo-input" placeholder="••••••••" required>
