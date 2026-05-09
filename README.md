@@ -2,78 +2,84 @@
 
 > *Le idee che risuonano.*
 
-A feature-rich social platform built with Laravel, inspired by the official [Chirper tutorial](https://laravel.com/learn/getting-started-with-laravel/what-are-we-building). Extended with AI-powered moderation, semantic search, role-based access control and more.
+Piattaforma social sviluppata con Laravel, ispirata al tutorial ufficiale [Chirper](https://laravel.com/learn/getting-started-with-laravel/what-are-we-building). Estesa con moderazione AI, ricerca semantica, ruoli e molto altro.
 
 ---
 
-## 📋 Table of Contents
+## 📋 Indice
 
 - [Overview](#overview)
-- [Features](#features)
+- [Funzionalità](#funzionalità)
 - [Tech Stack](#tech-stack)
-- [Database Schema](#database-schema)
-- [Getting Started](#getting-started)
-- [Environment Variables](#environment-variables)
-- [Author](#author)
+- [Database](#database)
+- [Installazione](#installazione)
+- [Variabili d'ambiente](#variabili-dambiente)
+- [Struttura del progetto](#struttura-del-progetto)
+- [Autore](#autore)
 
 ---
 
 ## Overview
 
-Echo is a school project that replicates and extends the base Laravel Chirper tutorial. Users can publish posts, comment, like, and interact with a daily topic set by an admin. The platform integrates OpenAI APIs for both **automatic content moderation** (before insertion) and **semantic search** (via text embeddings).
+Echo è un progetto scolastico che replica ed estende il tutorial Laravel Chirper. Gli utenti possono pubblicare post, commentare, mettere like e interagire con un topic giornaliero impostato dall'admin. La piattaforma integra le API di OpenAI per la **moderazione automatica dei contenuti** (prima dell'inserimento) e la **ricerca semantica** tramite embeddings testuali.
+
+L'ambiente di sviluppo è basato su **Docker** tramite Laravel Sail, con **phpMyAdmin** integrato per la gestione del database.
 
 ---
 
-## Features
+## Funzionalità
 
-### 👥 Authentication & Roles
-- Registration, login, logout via **Laravel Breeze**
-- Two roles: `user` and `admin`
-- Admins have exclusive access to privileged actions
+### 👥 Autenticazione e Ruoli
+- Registrazione, login, logout tramite **Laravel Breeze**
+- Due ruoli: `user` e `admin`
+- Middleware `AdminMiddleware` per proteggere le route riservate
+- Redirect automatico al feed se già loggato
 
-### 📝 Posts
-- Create, edit, delete posts
-- Like/unlike system
-- Automatic AI moderation before saving to DB
-- Flagged posts are stored but hidden, with audit trail
+### 📝 Post
+- Pubblicazione e eliminazione post
+- Sistema like/unlike
+- Moderazione AI prima del salvataggio nel DB
+- Post flaggati salvati ma nascosti, con audit trail
 
-### 💬 Comments
-- Comment on individual posts
-- Full CRUD for own comments
-- AI moderation applied to comments as well
+### 💬 Commenti
+- Commenta i singoli post direttamente dal feed
+- Eliminazione commento per autore o admin
+- Moderazione AI applicata anche ai commenti
 
-### 📌 Daily Topic (Admin only)
-- Admin sets one topic per day
-- Topic is pinned at the top of the feed
-- Archive page showing past topics with associated posts
+### 📌 Topic del Giorno (solo Admin)
+- L'admin imposta un topic al giorno
+- Il topic è fissato in cima al feed con stile dedicato
+- Il bottone di creazione sparisce automaticamente se il topic è già stato creato oggi
+- Pagina storico con tutti i topic passati
 
-### 🤖 AI — Content Moderation (Pre-insertion)
-- Every post/comment is validated through the **OpenAI Moderation API** before being saved
-- Flagged content is blocked with a user-friendly message
-- Moderation reason is stored for admin review
+### 🤖 AI — Moderazione Contenuti (in arrivo)
+- Ogni post/commento viene validato tramite **OpenAI Moderation API** prima del salvataggio
+- I contenuti flaggati vengono bloccati con messaggio all'utente
+- Il motivo della moderazione viene salvato per revisione admin
 
-### 🔍 AI — Semantic Search
-- Posts are indexed with **text embeddings** (OpenAI `text-embedding-3-small`)
-- Search finds posts by *meaning*, not just keyword matching
-- Similarity computed via cosine distance in PHP
+### 🔍 AI — Ricerca Semantica (in arrivo)
+- I post vengono indicizzati con **text embeddings** (OpenAI `text-embedding-3-small`)
+- La ricerca trova post per *significato*, non solo per keyword
+- Similarità calcolata tramite distanza coseno in PHP
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology |
+| Layer | Tecnologia |
 |---|---|
-| Framework | Laravel 11 |
-| Authentication | Laravel Breeze |
+| Framework | Laravel 13 |
+| Autenticazione | Laravel Breeze |
 | Frontend | Blade + Tailwind CSS |
-| Database | MySQL / SQLite |
-| AI — Moderation | OpenAI Moderation API |
-| AI — Search | OpenAI Embeddings API |
-| Queue (optional) | Laravel Queue (database driver) |
+| Database | MySQL 8.4 |
+| Ambiente | Docker + Laravel Sail |
+| DB Admin | phpMyAdmin |
+| AI — Moderazione | OpenAI Moderation API |
+| AI — Ricerca | OpenAI Embeddings API |
 
 ---
 
-## Database Schema
+## Database
 
 ```
 users
@@ -82,103 +88,167 @@ users
  └── timestamps
 
 posts
- ├── id, user_id (FK)
+ ├── id, userId (FK)
  ├── body
- ├── is_flagged, flagged_reason
+ ├── isFlagged, flaggedReason
  └── timestamps
 
 comments
- ├── id, post_id (FK), user_id (FK)
- ├── body
- ├── is_flagged
+ ├── id, postId (FK), userId (FK)
+ ├── body, isFlagged
  └── timestamps
 
-daily_topics
- ├── id, user_id (FK)
+dailyTopics
+ ├── id, userId (FK)
  ├── title, description
- ├── topic_date (unique)
+ ├── topicDate (unique)
  └── timestamps
 
-post_likes
- ├── id, user_id (FK), post_id (FK)
- └── created_at
- (unique constraint on user_id + post_id)
+postLikes
+ ├── id, userId (FK), postId (FK)
+ └── createdAt
+ (vincolo unique su userId + postId)
 
 embeddings
- ├── id, post_id (FK)
+ ├── id, postId (FK)
  ├── vector (JSON)
- └── created_at
+ └── createdAt
 ```
-## Getting Started
 
-### Prerequisites
+### Relazioni
 
-- PHP >= 8.2
-- Composer
-- Node.js & npm
-- MySQL or SQLite
-- An [OpenAI API key](https://platform.openai.com/api-keys)
+- `User` hasMany `Post`, `Comment`, `DailyTopic`
+- `Post` hasMany `Comment` — hasOne `Embedding`
+- `Post` belongsToMany `User` tramite `postLikes`
 
-### Installation
+---
+
+## Installazione
+
+### Prerequisiti
+
+- Docker Desktop
+- WSL2 (su Windows)
+- Git
+
+### Avvio con Laravel Sail
 
 ```bash
-# 1. Clone the repository
+# 1. Clona il repository
 git clone https://github.com/your-username/echo-social.git
 cd echo-social
 
-# 2. Install PHP dependencies
-composer install
-
-# 3. Install JS dependencies
-npm install && npm run build
-
-# 4. Copy environment file
+# 2. Copia il file environment
 cp .env.example .env
 
-# 5. Generate application key
-php artisan key:generate
+# 3. Avvia i container Docker
+./vendor/bin/sail up -d
 
-# 6. Configure your .env (see section below)
+# 4. Installa le dipendenze PHP
+./vendor/bin/sail composer install
 
-# 7. Run migrations
-php artisan migrate
+# 5. Genera la chiave applicazione
+./vendor/bin/sail artisan key:generate
 
-# 8. (Optional) Seed the database with demo data
-php artisan db:seed
+# 6. Esegui le migrazioni
+./vendor/bin/sail artisan migrate
 
-# 9. Start the development server
-php artisan serve
+# 7. Compila gli asset frontend
+./vendor/bin/sail npm install && ./vendor/bin/sail npm run build
+```
+
+Poi vai su:
+- **Sito:** `http://localhost`
+- **phpMyAdmin:** `http://localhost:8081`
+
+### Primo Admin
+
+```bash
+./vendor/bin/sail artisan tinker
+$user = App\Models\User::where('email', 'tua@email.com')->first();
+$user->role = 'admin';
+$user->save();
 ```
 
 ---
 
-## Environment Variables
-
-Add these to your `.env` file:
+## Variabili d'ambiente
 
 ```env
 APP_NAME=Echo
-APP_URL=http://localhost:8000
+APP_URL=http://localhost
 
 DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
+DB_HOST=mysql
 DB_PORT=3306
-DB_DATABASE=echo_social
-DB_USERNAME=root
-DB_PASSWORD=
+DB_DATABASE=laravel
+DB_USERNAME=sail
+DB_PASSWORD=password
 
-# OpenAI — required for moderation and semantic search
+# OpenAI — necessario per moderazione e ricerca semantica
 OPENAI_API_KEY=sk-...
 OPENAI_EMBEDDING_MODEL=text-embedding-3-small
 ```
 
 ---
 
-## Author
+## Struttura del progetto
 
-**C. Squeo, A. Magaletti, M. Gile, S. Verroca**
-School project — Panetti Pitagora Bari
-Academic year 2025/2026
+```
+app/
+├── Http/
+│   ├── Controllers/
+│   │   ├── PostController.php
+│   │   ├── CommentController.php
+│   │   ├── DailyTopicController.php
+│   │   ├── LikeController.php
+│   │   └── Auth/
+│   │       ├── AuthenticatedSessionController.php
+│   │       └── RegisteredUserController.php
+│   └── Middleware/
+│       └── AdminMiddleware.php
+├── Models/
+│   ├── User.php
+│   ├── Post.php
+│   ├── Comment.php
+│   ├── DailyTopic.php
+│   ├── PostLike.php
+│   └── Embedding.php
+└── Services/
+    ├── ModerationService.php
+    └── EmbeddingService.php
+
+database/migrations/
+├── create_users_table.php
+├── addRoleToUsers.php
+├── createPostsTable.php
+├── createCommentsTable.php
+├── createDailyTopicsTable.php
+├── createPostLikesTable.php
+└── createEmbeddingsTable.php
+
+resources/views/
+├── layouts/
+│   ├── app.blade.php
+│   └── guest.blade.php
+├── auth/
+│   ├── login.blade.php
+│   └── register.blade.php
+├── posts/
+│   └── index.blade.php
+├── topics/
+│   ├── index.blade.php
+│   └── create.blade.php
+└── welcome.blade.php
+```
+
+---
+
+## Autore
+
+**[C. Squeo, A. Magaletti, M. Gile, S. Verroca]**
+Progetto scolastico — [Panetti Pitagora]
+Anno scolastico 2025/2026
 
 ---
 
