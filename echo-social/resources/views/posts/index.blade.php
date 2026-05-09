@@ -1,6 +1,50 @@
 <x-app-layout>
     <div class="max-w-2xl mx-auto">
 
+        {{-- Topic del giorno --}}
+        @if($todayTopic)
+            <div class="bg-gradient-to-r from-indigo-600/20 to-purple-600/20 border
+                        border-indigo-600/30 rounded-2xl p-6 mb-6">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-semibold text-indigo-400 uppercase tracking-wider">
+                        🔊 Topic del giorno
+                    </span>
+                    <span class="text-xs text-gray-500">
+                        {{ $todayTopic->topicDate->format('d/m/Y') }}
+                    </span>
+                </div>
+                <h2 class="text-xl font-bold text-white mb-1">
+                    {{ $todayTopic->title }}
+                </h2>
+                @if($todayTopic->description)
+                    <p class="text-gray-300 text-sm">{{ $todayTopic->description }}</p>
+                @endif
+            </div>
+        @endif
+
+        {{-- Admin actions --}}
+        @if(auth()->user()->isAdmin())
+            <div class="flex items-center justify-between mb-4">
+                <span class="echo-badge-admin">Admin</span>
+                <div class="flex gap-2">
+                    @if(!$todayTopic)
+                        <a href="{{ route('topics.create') }}" class="echo-btn text-sm">
+                            + Topic del giorno
+                        </a>
+                    @endif
+                    <a href="{{ route('topics.index') }}" class="echo-btn-ghost text-sm">
+                        Storico topic
+                    </a>
+                </div>
+            </div>
+        @else
+            <div class="flex justify-end mb-4">
+                <a href="{{ route('topics.index') }}" class="echo-btn-ghost text-sm">
+                    Storico topic
+                </a>
+            </div>
+        @endif
+
         {{-- Form nuovo post --}}
         <div class="echo-card mb-6">
             <form method="POST" action="{{ route('posts.store') }}">
@@ -43,8 +87,8 @@
                         </div>
                     </div>
 
-                    {{-- Elimina (solo autore) --}}
-                    @if ($post->userId === auth()->id())
+                    {{-- Elimina (solo autore o admin) --}}
+                    @if($post->userId === auth()->id() || auth()->user()->isAdmin())
                         <form method="POST" action="{{ route('posts.destroy', $post) }}">
                             @csrf
                             @method('DELETE')

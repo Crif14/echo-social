@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\DailyTopic;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -14,7 +15,9 @@ class PostController extends Controller
             ->latest()
             ->get();
 
-        return view('posts.index', compact('posts'));
+        $todayTopic = DailyTopic::today()->with('user')->first();
+
+        return view('posts.index', compact('posts', 'todayTopic'));
     }
 
     public function store(Request $request)
@@ -41,4 +44,4 @@ class PostController extends Controller
 
         return redirect()->route('posts.index');
     }
-}
+}   

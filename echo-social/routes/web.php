@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DailyTopicController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -23,6 +24,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Route solo admin
+    Route::middleware(['admin'])->group(function () {
+        Route::get('/topics/create', [DailyTopicController::class, 'create'])->name('topics.create');
+        Route::post('/topics', [DailyTopicController::class, 'store'])->name('topics.store');
+    });
+
+    // Storico topic — visibile a tutti
+    Route::get('/topics', [DailyTopicController::class, 'index'])->name('topics.index');
 });
 
 require __DIR__.'/auth.php';
