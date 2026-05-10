@@ -14,15 +14,10 @@ class CleanFlaggedComments extends Command
     public function handle()
     {
         $deleted = Comment::where('isFlagged', true)
-            ->where(function ($query) {
-                $query->where('reviewStatus', 'rejected')
-                      ->orWhere(function ($q) {
-                          $q->whereNull('reviewStatus')
-                            ->where('flaggedAt', '<=', Carbon::now()->subDays(7));
-                      });
-            })
+            ->whereNull('reviewStatus')
+            ->where('flaggedAt', '<=', Carbon::now()->subDays(7))
             ->delete();
 
-        $this->info("Eliminati {$deleted} commenti flaggati.");
+        $this->info("Eliminati {$deleted} commenti non revisionati.");
     }
 }

@@ -26,4 +26,8 @@ return [
         'key' => env('GROQ_API_KEY'),
         'model' => env('GROQ_MODEL', 'llama-3.3-70b-versatile'),
     ],
+    'huggingface' => [
+        'key' => env('HUGGINGFACE_API_KEY'),
+        'model' => env('HUGGINGFACE_EMBEDDING_MODEL', 'sentence-transformers/all-MiniLM-L6-v2'),
+    ],
 ];

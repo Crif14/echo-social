@@ -74,10 +74,7 @@ class CommentController extends Controller
             abort(403);
         }
 
-        $comment->update([
-            'reviewedAt' => Carbon::now(),
-            'reviewStatus' => 'rejected',
-        ]);
+        $comment->delete();
 
         return redirect()->route('admin.comments');
     }
