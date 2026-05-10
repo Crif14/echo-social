@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\DailyTopic;
+use App\Services\ModerationService;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -26,6 +27,14 @@ class PostController extends Controller
             'body' => 'required|min:3|max:500',
         ]);
 
+        $moderation = new ModerationService();
+
+        if (!$moderation->isAllowed($request->body)) {
+            return back()->withErrors([
+                'body' => 'Il tuo post è stato bloccato dalla moderazione automatica.'
+            ])->withInput();
+        }
+
         Post::create([
             'userId' => auth()->id(),
             'body' => $request->body,
@@ -36,7 +45,7 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
-        if ($post->userId !== auth()->id()) {
+        if ($post->userId !== auth()->id() && !auth()->user()->isAdmin()) {
             abort(403);
         }
 
@@ -44,4 +53,4 @@ class PostController extends Controller
 
         return redirect()->route('posts.index');
     }
-}   
+}

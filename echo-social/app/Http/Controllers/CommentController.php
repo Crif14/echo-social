@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Post;
+use App\Services\ModerationService;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -13,6 +14,14 @@ class CommentController extends Controller
         $request->validate([
             'body' => 'required|min:1|max:300',
         ]);
+
+        $moderation = new ModerationService();
+
+        if (!$moderation->isAllowed($request->body)) {
+            return back()->withErrors([
+                'body_' . $post->id => 'Il commento è stato bloccato dalla moderazione.'
+            ])->withInput();
+        }
 
         Comment::create([
             'postId' => $post->id,
