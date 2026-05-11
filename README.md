@@ -200,14 +200,13 @@ $user->save();
 
 ## Variabili d'ambiente
 
-env
 APP_NAME=Echo
 APP_URL=http://localhost
 
 DB_CONNECTION=mysql
 DB_HOST=mysql
 DB_PORT=3306
-DB_DATABASE=laravel
+DB_DATABASE=echo-social
 DB_USERNAME=sail
 DB_PASSWORD=password
 
