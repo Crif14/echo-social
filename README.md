@@ -199,7 +199,7 @@ $user->save();
 ---
 
 ## Variabili d'ambiente
-
+```
 APP_NAME=Echo
 APP_URL=http://localhost
 DB_CONNECTION=mysql
@@ -212,7 +212,7 @@ GROQ_API_KEY=gsk_la-tua-chiave
 GROQ_MODEL=llama-3.3-70b-versatile
 HUGGINGFACE_API_KEY=hf_la-tua-chiave
 HUGGINGFACE_EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
-
+```
 ---
 
 ## Autore
