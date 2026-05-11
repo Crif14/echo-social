@@ -139,19 +139,22 @@ cd echo-social
 # 2. Copia il file environment
 copy .env.example .env
 
-# 3. Avvia i container Docker
+# 3. Installa le dipendenze di laravel
+docker compose run --rm laravel.test composer install
+
+# 4. Avvia i container Docker
 docker compose up -d
 
-# 4. Installa le dipendenze PHP
+# 5. Installa le dipendenze PHP
 docker compose exec laravel.test composer install
 
-# 5. Genera la chiave applicazione
+# 6. Genera la chiave applicazione
 docker compose exec laravel.test php artisan key:generate
 
-# 6. Esegui le migrazioni
+# 7. Esegui le migrazioni
 docker compose exec laravel.test php artisan migrate
 
-# 7. Compila gli asset frontend
+# 8. Compila gli asset frontend
 docker compose exec laravel.test npm install
 docker compose exec laravel.test npm run build
 ```
