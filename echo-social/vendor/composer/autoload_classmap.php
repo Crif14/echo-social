@@ -6,6 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Console\\Commands\\CleanFlaggedComments' => $baseDir . '/app/Console/Commands/CleanFlaggedComments.php',
     'App\\Http\\Controllers\\Auth\\AuthenticatedSessionController' => $baseDir . '/app/Http/Controllers/Auth/AuthenticatedSessionController.php',
     'App\\Http\\Controllers\\Auth\\RegisteredUserController' => $baseDir . '/app/Http/Controllers/Auth/RegisteredUserController.php',
     'App\\Http\\Controllers\\CommentController' => $baseDir . '/app/Http/Controllers/CommentController.php',
@@ -14,6 +15,7 @@ return array(
     'App\\Http\\Controllers\\LikeController' => $baseDir . '/app/Http/Controllers/LikeController.php',
     'App\\Http\\Controllers\\PostController' => $baseDir . '/app/Http/Controllers/PostController.php',
     'App\\Http\\Controllers\\ProfileController' => $baseDir . '/app/Http/Controllers/ProfileController.php',
+    'App\\Http\\Controllers\\SearchController' => $baseDir . '/app/Http/Controllers/SearchController.php',
     'App\\Http\\Middleware\\AdminMiddleware' => $baseDir . '/app/Http/Middleware/AdminMiddleware.php',
     'App\\Http\\Requests\\Auth\\LoginRequest' => $baseDir . '/app/Http/Requests/Auth/LoginRequest.php',
     'App\\Http\\Requests\\ProfileUpdateRequest' => $baseDir . '/app/Http/Requests/ProfileUpdateRequest.php',
@@ -24,6 +26,7 @@ return array(
     'App\\Models\\PostLike' => $baseDir . '/app/Models/PostLike.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',
     'App\\Providers\\AppServiceProvider' => $baseDir . '/app/Providers/AppServiceProvider.php',
+    'App\\Services\\EmbeddingService' => $baseDir . '/app/Services/EmbeddingService.php',
     'App\\Services\\ModerationService' => $baseDir . '/app/Services/ModerationService.php',
     'App\\View\\Components\\AppLayout' => $baseDir . '/app/View/Components/AppLayout.php',
     'App\\View\\Components\\GuestLayout' => $baseDir . '/app/View/Components/GuestLayout.php',

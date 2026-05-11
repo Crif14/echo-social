@@ -548,6 +548,7 @@ class ComposerStaticInit74199c0a3889e8d1256a25f93805ef56
     );
 
     public static $classMap = array (
+        'App\\Console\\Commands\\CleanFlaggedComments' => __DIR__ . '/../..' . '/app/Console/Commands/CleanFlaggedComments.php',
         'App\\Http\\Controllers\\Auth\\AuthenticatedSessionController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/AuthenticatedSessionController.php',
         'App\\Http\\Controllers\\Auth\\RegisteredUserController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/RegisteredUserController.php',
         'App\\Http\\Controllers\\CommentController' => __DIR__ . '/../..' . '/app/Http/Controllers/CommentController.php',
@@ -556,6 +557,7 @@ class ComposerStaticInit74199c0a3889e8d1256a25f93805ef56
         'App\\Http\\Controllers\\LikeController' => __DIR__ . '/../..' . '/app/Http/Controllers/LikeController.php',
         'App\\Http\\Controllers\\PostController' => __DIR__ . '/../..' . '/app/Http/Controllers/PostController.php',
         'App\\Http\\Controllers\\ProfileController' => __DIR__ . '/../..' . '/app/Http/Controllers/ProfileController.php',
+        'App\\Http\\Controllers\\SearchController' => __DIR__ . '/../..' . '/app/Http/Controllers/SearchController.php',
         'App\\Http\\Middleware\\AdminMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/AdminMiddleware.php',
         'App\\Http\\Requests\\Auth\\LoginRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Auth/LoginRequest.php',
         'App\\Http\\Requests\\ProfileUpdateRequest' => __DIR__ . '/../..' . '/app/Http/Requests/ProfileUpdateRequest.php',
@@ -566,6 +568,7 @@ class ComposerStaticInit74199c0a3889e8d1256a25f93805ef56
         'App\\Models\\PostLike' => __DIR__ . '/../..' . '/app/Models/PostLike.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
+        'App\\Services\\EmbeddingService' => __DIR__ . '/../..' . '/app/Services/EmbeddingService.php',
         'App\\Services\\ModerationService' => __DIR__ . '/../..' . '/app/Services/ModerationService.php',
         'App\\View\\Components\\AppLayout' => __DIR__ . '/../..' . '/app/View/Components/AppLayout.php',
         'App\\View\\Components\\GuestLayout' => __DIR__ . '/../..' . '/app/View/Components/GuestLayout.php',

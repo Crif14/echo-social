@@ -15,15 +15,24 @@ class EmbeddingService
         $this->model = config('services.huggingface.model');
     }
 
-    public function getEmbedding(string $text): array
+    public function getEmbedding(string $text): ?array
     {
-        $response = Http::withToken($this->apiKey)
-            ->post("https://api-inference.huggingface.co/pipeline/feature-extraction/{$this->model}", [
-                'inputs' => $text,
-                'options' => ['wait_for_model' => true],
-            ]);
+        try {
+            $response = Http::withToken($this->apiKey)
+                ->timeout(30)
+                ->post("https://router.huggingface.co/hf-inference/models/{$this->model}/pipeline/feature-extraction", [
+                    'inputs' => $text,
+                ]);
 
-        return $response->json();
+            $data = $response->json();
+
+            if (!is_array($data)) return null;
+
+            return $data;
+
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     public function cosineSimilarity(array $a, array $b): float
@@ -33,9 +42,9 @@ class EmbeddingService
         $normB = 0;
 
         foreach ($a as $i => $val) {
-            $dot += $val * $b[$i];
+            $dot += $val * ($b[$i] ?? 0);
             $normA += $val ** 2;
-            $normB += $b[$i] ** 2;
+            $normB += ($b[$i] ?? 0) ** 2;
         }
 
         if ($normA == 0 || $normB == 0) return 0;
@@ -47,9 +56,13 @@ class EmbeddingService
     {
         $queryEmbedding = $this->getEmbedding($query);
 
+        if (!$queryEmbedding) return [];
+
         $scores = [];
         foreach ($postEmbeddings as $postId => $vector) {
-            $scores[$postId] = $this->cosineSimilarity($queryEmbedding, $vector);
+            if (is_array($vector)) {
+                $scores[$postId] = $this->cosineSimilarity($queryEmbedding, $vector);
+            }
         }
 
         arsort($scores);
