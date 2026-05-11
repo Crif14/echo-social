@@ -84,7 +84,6 @@ L'ambiente di sviluppo è basato su **Docker** tramite Laravel Sail, con **phpMy
 | DB Admin | phpMyAdmin |
 | AI — Moderazione | Groq API (llama-3.3-70b-versatile) |
 | AI — Ricerca | HuggingFace Embeddings (all-MiniLM-L6-v2) |
-| HTTP Client | Guzzle (incluso in Laravel) |
 
 ---
 
