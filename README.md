@@ -111,7 +111,6 @@ git clone https://github.com/your-username/echo-social.git
 cd echo-social
 
 # 2. Copia il file environment
-cp .env.example .env
 
 # 3. Avvia i container Docker
 ./vendor/bin/sail up -d
@@ -137,7 +136,6 @@ git clone https://github.com/your-username/echo-social.git
 cd echo-social
 
 # 2. Copia il file environment
-copy .env.example .env
 
 # 3. Installa le dipendenze di laravel
 docker compose run --rm laravel.test composer install
