@@ -60,7 +60,11 @@
                         <button type="submit" class="bg-green-600/20 hover:bg-green-600/40 text-green-400
                                            border border-green-600/30 px-4 py-2 rounded-xl
                                            text-sm font-semibold transition-colors">
-                            ✅ Approva
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100" height="100">
+                                <circle cx="12" cy="12" r="10" fill="#4CD964"/>
+                                <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" fill="#FFFFFF"/>
+                            </svg>
+                            Approva
                         </button>
                     </form>
 
@@ -70,7 +74,11 @@
                         <button type="submit" class="bg-red-600/20 hover:bg-red-600/40 text-red-400
                                            border border-red-600/30 px-4 py-2 rounded-xl
                                            text-sm font-semibold transition-colors">
-                            ❌ Rifiuta
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100" height="100">
+                                <circle cx="12" cy="12" r="10" fill="#FF3B30"/>
+                                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" fill="#FFFFFF"/>
+                            </svg>
+ Rifiuta
                         </button>
                     </form>
                 </div>
