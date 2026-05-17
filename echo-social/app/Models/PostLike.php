@@ -12,6 +12,7 @@ class PostLike extends Model
 
     protected $fillable = ['userId', 'postId'];
 
+    //Collega direttamente il singolo Like sia all'utente che al post.
     public function user()
     {
         return $this->belongsTo(User::class, 'userId');
