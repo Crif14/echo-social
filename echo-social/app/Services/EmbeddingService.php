@@ -15,6 +15,10 @@ class EmbeddingService
         $this->model = config('services.huggingface.model');
     }
 
+    /*
+    * Prende il testo di un post o di una ricerca e lo invia a Hugging Face 
+    * che trasforma il testo in un Embedding, ovvero un array di numeri decimali che rappresenta il significato del testo
+    */
     public function getEmbedding(string $text): ?array
     {
         try {
@@ -35,6 +39,10 @@ class EmbeddingService
         }
     }
 
+    /*
+    * Capisce quanto due vettori di embedding sono simili tra loro, 
+    *restituendo un punteggio da 0 a 1, dove 1 significa che i due vettori sono identici e 0 significa che sono completamente diversi
+    */
     public function cosineSimilarity(array $a, array $b): float
     {
         $dot = 0;
@@ -52,6 +60,9 @@ class EmbeddingService
         return $dot / (sqrt($normA) * sqrt($normB));
     }
 
+    /*
+    * Prende la frase di ricerca e restituisce un array di punteggi di similarità tra la query e ogni post, ordinati dal più simile al meno simile
+    */
     public function search(string $query, array $postEmbeddings): array
     {
         $queryEmbedding = $this->getEmbedding($query);
